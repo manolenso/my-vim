@@ -6,19 +6,29 @@ call pathogen#helptags()
 
 set nocompatible   " Disable vi-compatibility
 
-" set t_Co=256
+set t_Co=256
 set encoding=utf-8
 syntax on
-colorscheme monokai
+colorscheme molokai
+
+"redefine keymapping for emmet
+let g:user_emmet_leader_key='<C-e>'
 
 
-set guifont=Source\ Code\ Pro\ Medium\ for\ powerline:h16
+"setup for powerline
+set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
+let g:Powerline_symbols = 'fancy'
+
+" Always show vim-airline
+set laststatus=2
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#left_sep = ' '
+
+set guifont=PragmataProPowerline\ for\ Powerline:h16
 set guioptions-=T " Removes top toolbar
 set guioptions-=r " Removes right hand scroll bar
 set go-=L " Removes left hand scroll bar
 set linespace=15
-
-
 
 set showmode                    " always show what mode we're currently editing in
 set nowrap                      " don't wrap lines
@@ -61,15 +71,17 @@ nnoremap j g+body
 nnoremap k gk
 
 "Easy escaping to normal modelww:w
-imap jj <esc>
+imap jj <esc>c
 
 "Auto change directory to match current file ,cd
 nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
 
 "easier window navigation whit NERDTree
-"nnoremap <silent> <F9> :NERDTree<cr>
+"nnoremap <silent> <F9> :NERDTree<cr> " NERDTree autostart
 " ### NERDTree {{{
-nmap <silent> <F9> :NERDTree<CR>
+"autocmd vimenter * if !argc() | NERDTree | endif
+nmap <silent> <F9> :NERDTreeToggle<CR>
+silent! map <F3> :NERDTreeFind<CR>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore=['\env','\~$', '\.pyc$', '\.swp$', '\.egg-info$', '^dist$', '^build$']
 let NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\~$']
@@ -152,5 +164,24 @@ autocmd BufWritePre *.php :%s/\s\+$//e
 
 " Edit todo list for project
 nmap ,todo :e todo.txt<cr>
+
+
+function! InsertStatuslineColor(mode)
+  if a:mode == 'i'
+    hi statusline guibg=magenta
+  elseif a:mode == 'r'
+    hi statusline guibg=blue
+  else
+    hi statusline guibg=red
+  endif
+endfunction
+
+"color 
+au InsertEnter * call InsertStatuslineColor(v:insertmode)
+au InsertChange * call InsertStatuslineColor(v:insertmode)
+au InsertLeave * hi statusline guibg=green
+
+" default the statusline to green when entering Vim
+hi statusline guibg=green
 
 

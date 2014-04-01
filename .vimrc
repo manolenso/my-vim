@@ -19,19 +19,22 @@ nnoremap <Leader>bc :BundleClean<CR>
 Bundle 'scrooloose/nerdtree'
 Bundle 'bling/vim-airline'
 Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-pathogen'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'mattn/emmet-vim'
 Bundle 'mattn/gist-vim'
-Bundle 'mattn/Webapi-vim'
+Bundle 'mattn/webapi-vim'
 Bundle 'mklabs/grunt.vim'
 Bundle 'xolox/vim-misc'
 Bundle 'xolox/vim-shell'
 Bundle 'garbas/vim-snipmate'
 Bundle 'honza/vim-snippets'
 Bundle 'gmarik/vundle'
-
+Bundle 'cakebaker/scss-syntax.vim'
+Bundle 'AtsushiM/sass-compile.vim'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set t_Co=256
@@ -108,7 +111,7 @@ nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ### NERDTree CONFIGURATION{{{
 "autocmd vimenter * if !argc() | NERDTree | endif
-nmap <leader>nd :NERDTreeToggle<CR>
+nmap <leader>n :NERDTreeToggle<CR>
 silent! map <F3> :NERDTreeFind<CR>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore=['\env','\~$', '\.pyc$', '\.swp$', '\.egg-info$', '^dist$', '^build$']
@@ -116,7 +119,7 @@ let NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\~$']
 let NERDTreeShowBookmarks=1
 let NERDTreeHightlightCursorline=0
 let NERDTreeDirArrows=0
-let NERDTreeShowHidden=1
+let NERDTreeShowHidden=0
 "let NERDChristmasTree=1
 "let NERDTreeAutoCenter=0
 "let NERDTreeShowLineNumbers=1

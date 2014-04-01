@@ -6,8 +6,15 @@ set nocompatible   " Disable vi-compatibility
 call pathogen#infect()
 call pathogen#helptags()
 
+"""""""""""""""""""""" VUNDLE CONFIG """""""""""""""""""""""""""""""""""""""
 set rtp+=~/.vim/bundle/vundle
 call vundle#rc()
+
+" let Vundle manage Vundle, required! 
+Bundle 'https://github.com/gmarik/vundle.git'
+nnoremap <Leader>bi :BundleInstall<CR>
+nnoremap <Leader>bu :BundleInstall!<CR> " Because this also updates
+nnoremap <Leader>bc :BundleClean<CR>
 
 Bundle 'scrooloose/nerdtree'
 Bundle 'bling/vim-airline'
@@ -25,9 +32,7 @@ Bundle 'garbas/vim-snipmate'
 Bundle 'honza/vim-snippets'
 Bundle 'gmarik/vundle'
 
-
-
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set t_Co=256
 set encoding=utf-8

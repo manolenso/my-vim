@@ -1,10 +1,15 @@
 " Vimrc File  for @manolenso
 
 set nocompatible   " Disable vi-compatibility
-
+filetype off "required by vundle
 " Initialisation de pathogen
 call pathogen#infect()
 call pathogen#helptags()
+
+"Load custom settings inspired by https://github.com/shawnplus/dotfiles/
+source ~/.vim/startup/color.vim
+source ~/.vim/startup/mapped_commenting.vim
+source ~/.vim/startup/function.vim
 
 """""""""""""""""""""" VUNDLE CONFIG """""""""""""""""""""""""""""""""""""""
 set rtp+=~/.vim/bundle/vundle
@@ -15,11 +20,11 @@ Bundle 'https://github.com/gmarik/vundle.git'
 nnoremap <Leader>bi :BundleInstall<CR>
 nnoremap <Leader>bu :BundleInstall!<CR> " Because this also updates
 nnoremap <Leader>bc :BundleClean<CR>
-
+Bundle 'Lokaltog/vim-easymotion'
 Bundle 'scrooloose/nerdtree'
 Bundle 'bling/vim-airline'
 Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-rais'
 Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-pathogen'
 Bundle 'vim-ruby/vim-ruby'
@@ -35,21 +40,25 @@ Bundle 'honza/vim-snippets'
 Bundle 'gmarik/vundle'
 Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'AtsushiM/sass-compile.vim'
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Bundle 'sjl/gundo.vim'
+
+""""""""" Gist Config"""""""""""""""""""""""
+let g:gist_open_browser_after_post = 1
+let g:gist_use_password_in_gitconfig = 1
+let g:gist_clip_command = 'xclip -selection clipboard'
+
 
 set t_Co=256
 set encoding=utf-8
 syntax on
-colorscheme molokai
+
 
 "redefine keymapping for emmet
 let g:user_emmet_leader_key='<C-e>'
 
-" setup for git gist
-let g:gist_use_password_in_gitconfig = 1
-
 
 "setup for powerline
+let g:powerline_loaded = 1
 set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 let g:Powerline_symbols = 'fancy'
 
@@ -58,12 +67,28 @@ set laststatus=2
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ' '
 
+" or copy paste the following into your vimrc for shortform text
+let g:airline_mode_map = {
+      \ '__' : '-',
+      \ 'n'  : 'N',
+      \ 'i'  : 'I',
+      \ 'R'  : 'R',
+      \ 'c'  : 'C',
+      \ 'v'  : 'V',
+      \ 'V'  : 'V',
+      \ '^V' : 'V',
+      \ 's'  : 'S',
+      \ 'S'  : 'S',
+      \ '^S' : 'S',
+      \ }
+
+
 set guifont=PragmataProPowerline\ for\ Powerline:h16
 set guioptions-=T " Removes top toolbar
 set guioptions-=r " Removes right hand scroll bar
 set go-=L " Removes left hand scroll bar
 set linespace=15
-
+"set spell spelllang=fr
 set showmode                    " always show what mode we're currently editing 
 set nowrap                      " don't wrap lines
 set tabstop=4                   " a tab is four spaces
@@ -111,7 +136,7 @@ nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ### NERDTree CONFIGURATION{{{
 "autocmd vimenter * if !argc() | NERDTree | endif
-nmap <leader>n :NERDTreeToggle<CR>
+nmap <leader>n :NERDTree<CR>
 silent! map <F3> :NERDTreeFind<CR>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore=['\env','\~$', '\.pyc$', '\.swp$', '\.egg-info$', '^dist$', '^build$']
@@ -179,14 +204,6 @@ command! H let @/=""
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
-" Source the vimrc file after saving it
-if has("autocmd")
-  autocmd bufwritepost .vimrc source $MYVIMRC
-  endif
-
-
-
-
 " Auto-remove trailing spaces
 autocmd BufWritePre *.php :%s/\s\+$//e
 
@@ -196,23 +213,6 @@ nmap ,todo :e todo.txt<cr>
 
 " Show syntax highlighting groups for word under cursor
 nmap <C-S-P> :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
-
-function! InsertStatuslineColor(mode)
-  if a:mode == 'i'
-    hi statusline guibg=magenta
-  elseif a:mode == 'r'
-    hi statusline guibg=blue
-  else
-    hi statusline guibg=red
-  endif
-endfunction
 
 "color 
 au InsertEnter * call InsertStatuslineColor(v:insertmode)

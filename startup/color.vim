@@ -1,1 +1,2 @@
-colorscheme vividchalk
+"colorscheme vividchalk
+colorscheme skittles_berry

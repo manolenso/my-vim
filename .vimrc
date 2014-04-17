@@ -1,4 +1,4 @@
-" Vimrc File  for @manolenso
+" My Vimrc File @manolenso
 
 set nocompatible   " Disable vi-compatibility
 filetype off "required by vundle
@@ -10,9 +10,11 @@ call pathogen#helptags()
 source ~/.vim/startup/color.vim
 source ~/.vim/startup/mapped_commenting.vim
 source ~/.vim/startup/function.vim
-
-"""""""""""""""""""""" VUNDLE CONFIG """""""""""""""""""""""""""""""""""""""
-set rtp+=~/.vim/bundle/vundle
+source ~/.vim/startup/mapping.vim
+source ~/.vim/startup/iabbrev.vim
+source ~/.vim/startup/errormsg.vim
+"""""""""""""""""""""" VUNDLE CONFIG""""""""""""""""""""""""""""""""""""
+    set rtp+=~/.vim/bundle/vundle
 call vundle#rc()
 
 " let Vundle manage Vundle, required! 
@@ -20,13 +22,19 @@ Bundle 'https://github.com/gmarik/vundle.git'
 nnoremap <Leader>bi :BundleInstall<CR>
 nnoremap <Leader>bu :BundleInstall!<CR> " Because this also updates
 nnoremap <Leader>bc :BundleClean<CR>
+Bundle 'airblade/vim-gitgutter'
+Bundle 'timcharper/textile.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'tangledhelix/vim-octopress'
+Bundle 'shawncplus/skittles_berry'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'scrooloose/nerdtree'
 Bundle 'bling/vim-airline'
 Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rais'
+Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-pathogen'
+Bundle 'tpope/vim-surround'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'mattn/emmet-vim'
@@ -52,22 +60,26 @@ set t_Co=256
 set encoding=utf-8
 syntax on
 
+" open current file in google chrome
+nmap <silent> <leader>gc :exec 'silent !open -a "Google Chrome" % &'
 
 "redefine keymapping for emmet
-let g:user_emmet_leader_key='<C-e>'
+let g:user_emmet_leader_key = '<C-y>,'
+
+nnoremap <leader>fo :call FoldColumnToggle()<cr>
 
 
 "setup for powerline
-let g:powerline_loaded = 1
-set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
-let g:Powerline_symbols = 'fancy'
+"let g:powerline_loaded = 1
+"set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
+"let g:Powerline_symbols = 'fancy'
 
 " Always show vim-airline
 set laststatus=2
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ' '
 
-" or copy paste the following into your vimrc for shortform text
+" shortform text for vim airline
 let g:airline_mode_map = {
       \ '__' : '-',
       \ 'n'  : 'N',
@@ -85,7 +97,7 @@ let g:airline_mode_map = {
 
 set guifont=PragmataProPowerline\ for\ Powerline:h16
 set guioptions-=T " Removes top toolbar
-set guioptions-=r " Removes right hand scroll bar
+set guioptions-=r " Removes right hand scroll br
 set go-=L " Removes left hand scroll bar
 set linespace=15
 "set spell spelllang=fr
@@ -123,11 +135,45 @@ nmap <leader>w :w!<cr>w
 nmap <leader>c :%!/usr/local/bin/Markdown.pl --html4tags<cr>
 
 " Down is really the next line
-nnoremap j g+body
+"nnoremap j g+body
 
 nnoremap k gk
 
-"Easy escaping to normal modelww:w
+"autocomplete Parenthesis inoremap
+"When you type an open brace, this will automatically
+"insert a closing brace on the same line, after the cursor.
+"If you quickly hit Enter after the open brace, (to begin
+"a code block), the closing brace will be inserted on the
+"line below the cursor. If you quickly press the open brace
+"key again after the open brace, Vim won't insert anything extra,
+" you'll just get a single open brace. Finally, if you quickly
+"type an open and close brace, Vim will not do anything special.
+
+inoremap {      {}<Left>
+inoremap {<CR>  {<CR>}<Esc>O
+inoremap {{     {
+inoremap {{     {{
+
+inoremap (      ()<Left>
+inoremap (<CR>  (<CR>)<Esc>O
+inoremap ((     (
+inoremap ()     ()
+
+inoremap [      []<Left>
+inoremap [<CR>  [<CR>]<Esc>O
+inoremap [[     [
+inoremap []     []
+
+inoremap <      <><Left>
+inoremap <<     <
+
+inoremap "      ""<Left>
+inoremap ""     "
+
+inoremap '      ''<Left>
+inoremap ''     '
+
+"Easy escaping in insert mode
 imap jj <esc>c
 
 "Auto change directory to match current file ,cd
@@ -136,19 +182,19 @@ nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ### NERDTree CONFIGURATION{{{
 "autocmd vimenter * if !argc() | NERDTree | endif
-nmap <leader>n :NERDTree<CR>
+nmap <leader>n :NERDTreeToggle<CR>
 silent! map <F3> :NERDTreeFind<CR>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore=['\env','\~$', '\.pyc$', '\.swp$', '\.egg-info$', '^dist$', '^build$']
 let NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\~$']
 let NERDTreeShowBookmarks=1
 let NERDTreeHightlightCursorline=0
-let NERDTreeDirArrows=0
+let NERDTreeDirArrows=1
 let NERDTreeShowHidden=0
 "let NERDChristmasTree=1
 "let NERDTreeAutoCenter=0
 "let NERDTreeShowLineNumbers=1
-"let NERDTreeWinSize=40
+let NERDTreeWinSize=40
 "let NERDTreeMinimalUI=1
 "}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -174,7 +220,7 @@ nmap :bp :BufSurfBack<cr>
 nmap :bn :BufSurfForward<cr>
 
 " Edit VIMRC File
-nmap <leader>v :tabedit $MYVIMRC<CR>
+nnoremap <leader>v :vsplit $MYVIMRC<CR>
 
 highlight Search cterm=underline
 
@@ -221,5 +267,4 @@ au InsertLeave * hi statusline guibg=green
 
 " default the statusline to green when entering Vim
 hi statusline guibg=green
-
 

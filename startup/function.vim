@@ -3,9 +3,25 @@
 if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
   endif
+" test function interupteur on/off syntax 
+function! ToggleSyntax()
+  if exists("g:syntax_on")
+        syntax off
+     else
+        syntax enable
+    endif
+endfunction
+nmap <silent>;s :call ToggleSyntax()<CR>
 
-
-
+" Function toogle NERDTree
+function! ToggleNerdtree()
+    if exists("g:NERDTree_on")
+        syntax off
+    else
+        syntax enable
+    endif
+endfunction
+nmap <leader>n :call ToggleNerdtree()<CR>
 function! <SID>SynStack()
   if !exists("*synstack")
     return
@@ -22,4 +38,13 @@ function! InsertStatuslineColor(mode)
   else
     hi statusline guibg=red
   endif
+endfunction
+
+" function toogle 
+function! FoldColumnToggle()
+    if &foldcolumn
+        setlocal foldcolumn=0
+    else
+        setlocal foldcolumn=4
+    endif
 endfunction
